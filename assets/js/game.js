@@ -8,6 +8,11 @@ var enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 var enemyHealth = 50;
 var enemyAttack = 12;
 
+var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min +1) + min);
+    return value;
+};
+
 var fight = function(enemyName) {
     while (playerHealth > 0 && enemyHealth > 0) {
       // ask player if they'd like to fight or run
@@ -22,14 +27,16 @@ var fight = function(enemyName) {
         if (confirmSkip) {
           window.alert(playerName + ' has decided to skip this fight. Goodbye!');
           // subtract money from playerMoney for skipping
-          playerMoney = playerMoney - 10;
+          //playerMoney = playerMoney - 10;
+          playerMoney = Math.max(0, playerMoney - 10);
           console.log("playerMoney", playerMoney)
           break;
         }
       }
   
-      // remove enemy's health by subtracting the amount set in the playerAttack variable
-      enemyHealth = enemyHealth - playerAttack;
+        // remove enemy's health by subtracting the amount set in the playerAttack variable
+        //enemyHealth = enemyHealth - playerAttack; ---> Addin in Max blow
+      enemyHealth = Math.max(0, enemyHealth - playerAttack);
       console.log(
         playerName + ' attacked ' + enemyName + '. ' + enemyName + ' now has ' + enemyHealth + ' health remaining.'
       );
@@ -47,8 +54,9 @@ var fight = function(enemyName) {
         window.alert(enemyName + ' still has ' + enemyHealth + ' health left.');
       }
   
-      // remove players's health by subtracting the amount set in the enemyAttack variable
-      playerHealth = playerHealth - enemyAttack;
+        // remove players's health by subtracting the amount set in the enemyAttack variable
+        //playerHealth = playerHealth - enemyAttack; --> added Math.max
+      playerHealth = Math.max(0, playerHealth - enemyAttack);
       console.log(
         enemyName + ' attacked ' + playerName + '. ' + playerName + ' now has ' + playerHealth + ' health remaining.'
       );
@@ -74,7 +82,7 @@ var startGame = function() {
         if (playerHealth > 0) {
             window.alert("Welcome to the Robot Gladiators! Round " + (i + 1));
             var pickedEnemyName = enemyNames[i];
-            enemyHealth = 50;
+            enemyHealth = randomNumber(40, 60);
             fight(enemyNames[i]);
             // if player is still alive and we're not at the last enemy in the array
             if (playerHealth > 0 && i < enemyNames.length - 1) {
@@ -97,7 +105,7 @@ var startGame = function() {
 var endGame = function() {
     // if player is still alive, player wins!
     if (playerHealth > 0) {
-        window.alert("Great job, you've survived the game! You ow have a score of " + playerMoney + ".");
+        window.alert("Great job, you've survived the game! You now have a score of " + playerMoney + ".");
     } else {
         window.alert("You've lost your robot in the battle.");
     }
